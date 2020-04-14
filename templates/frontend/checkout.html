@@ -1,0 +1,165 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load extra_tags %}
+
+{% block content %}
+	 
+	<!-- checkout page -->
+	<div class="privacy py-sm-5 py-4">
+		<div class="container py-xl-4 py-lg-2">
+			<!-- tittle heading -->
+			<h3 class="tittle-w3l text-center mb-lg-5 mb-sm-4 mb-3">
+				<span>C</span>heckout
+			</h3>
+			<!-- //tittle heading -->
+			<div class="checkout-right">
+				<h4 class="mb-sm-4 mb-3">Your shopping cart contains:
+					<span>{{total_number}} Products</span> and cost: ${{complete_price|floatformat:2}}
+				</h4> 
+				{% if messages %} 
+				{% for message in messages %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					{{message}}
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					  <span aria-hidden="true">&times;</span>
+					</button>
+				  </div>
+				{% endfor %} 
+			 {% endif %} 
+				<div class="table-responsive">
+					<table class="timetable_sub">
+						<thead>
+							<tr>
+								<th>SL No.</th>
+								<th>Product</th>
+								<th>Product Name</th>
+								<th>Quality</th>
+								<th>Product price</th> 
+								<th>Total Price</th>
+								<th>Remove</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+							{% if order_items %}
+								<form action="{% url 'core:card_update' %}" method="POST"> {% csrf_token %}
+								{% for item in order_items %}
+								<tr class="rem1">
+									<td class="invert">{{forloop.counter}}</td>
+									<td class="invert-image">
+										<a href="{% url 'core:product_details' item.product.slug %}">
+											<img src="{{item.product.product_thumbnail.url}}" alt=" " class="img-responsive">
+										</a>
+									</td>
+									<td class="invert">{{item.product.name}}</td>
+									<td class="invert">
+										<div class="quantity">
+											<div class="quantity-select">
+												<div onclick="myFunction({{forloop.counter}})" class="entry value-minus">&nbsp;</div>
+												<div class="entry value">
+													<input type="number" id="quantity_{{forloop.counter}}" class="form-control" name="amount_{{forloop.counter}}" value="{{item.quantity}}">
+												</div>
+												<div onclick="myFunctionAdd({{forloop.counter}})" class="entry value-plus active">&nbsp;</div>
+											</div>
+										</div>
+									</td>
+									<td class="invert">{{item.product.main_price|floatformat:2}}</td>
+									<td class="invert">{{item.card_price|floatformat:2}}</td>
+									<td class="invert">
+										<div class="rem">
+											<a href="{% url 'core:remove_from_card' item.product.id %}"><div class="close1"> </div></a>
+										</div>
+									</td>
+								</tr>
+								{% endfor %}
+								<tr> 
+									<td><input class="btn btn-danger" type="submit" value="Update Card"></td>
+								</tr>
+								
+							</form>
+							{% endif %}
+								 
+
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="checkout-left">
+				<div class="address_form_agile mt-sm-5 mt-4">
+					<h4 class="mb-sm-4 mb-3">Add a new Details</h4>
+					<form action="payment.html" method="post" class="creditly-card-form agileinfo_form">
+						<div class="creditly-wrapper wthree, w3_agileits_wrapper">
+							<div class="information-wrapper">
+								<div class="first-row">
+									<div class="controls form-group">
+										<input class="billing-address-name form-control" type="text" name="name" placeholder="Full Name" required="">
+									</div>
+									<div class="w3_agileits_card_number_grids">
+										<div class="w3_agileits_card_number_grid_left form-group">
+											<div class="controls">
+												<input type="text" class="form-control" placeholder="Mobile Number" name="number" required="">
+											</div>
+										</div>
+										<div class="w3_agileits_card_number_grid_right form-group">
+											<div class="controls">
+												<input type="text" class="form-control" placeholder="Landmark" name="landmark" required="">
+											</div>
+										</div>
+									</div>
+									<div class="controls form-group">
+										<input type="text" class="form-control" placeholder="Town/City" name="city" required="">
+									</div>
+									<div class="controls form-group">
+										<select class="option-w3ls">
+											<option>Select Address type</option>
+											<option>Office</option>
+											<option>Home</option>
+											<option>Commercial</option>
+
+										</select>
+									</div>
+								</div>
+								<button class="submit check_out btn">Delivery to this Address</button>
+							</div>
+						</div>
+					</form>
+					<div class="checkout-right-basket">
+						<a href="payment.html">Make a Payment
+							<span class="far fa-hand-point-right"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- //checkout page -->
+
+
+
+	{% endblock content %}
+	
+	{% block script %}
+		<script>
+			function myFunction(e) {  
+				id = "quantity_"+e.toString() 
+				x = document.getElementById(id).value; 
+				x = x-1;
+				document.getElementById(id).setAttribute('value',x);
+ 
+			}
+
+			function myFunctionAdd(e) {  
+				id = "quantity_"+e.toString() 
+				x = document.getElementById(id).value;  
+				x++;
+				document.getElementById(id).setAttribute('value',x);
+ 
+			}
+
+
+
+		</script>
+	{% endblock script %}
+		

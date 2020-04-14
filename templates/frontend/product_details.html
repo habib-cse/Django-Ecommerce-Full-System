@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Wealshop | {{product.name}}
+{% endblock title %}
+	
+{% block content %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+	<div class="banner-bootom-w3-agileits py-5">
+		<div class="container py-xl-4 py-lg-2"> 
+			<div class="row">
+				<div class="col-lg-5 col-md-8 single-right-left ">
+					<div class="grid images_3_of_2">
+						<div class="flexslider">
+							<ul class="slides">
+								<li data-thumb="/media/{{product.product_thumbnail}}">
+									<div class="thumb-image">
+										<img src="/media/{{product.product_thumbnail}}" data-imagezoom="true" class="img-fluid" alt=""> </div>
+								</li>
+								{% for item in product.product_galary_image.all %} 
+								<li data-thumb="/media/{{item.images}}">
+									<div class="thumb-image">
+										<img src="/media/{{item.images}}" data-imagezoom="true" class="img-fluid" alt=""> </div>
+								</li>
+								{% endfor %}
+
+							</ul>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-7 single-right-left simpleCart_shelfItem">
+					<h3 class="mb-3">{{product.title}}</h3>
+					
+					{% if avg_review == 0 %}
+						<p>Product Review: <strong style="color: red;">
+							No Review</strong> yet</p> 
+					{% else %}
+					<p>Product Review: <strong style="color: red;">
+						{{avg_review|floatformat:1}}
+					</strong> based on {{total_user}} customers</p>
+					{% endif %}
+					
+						
+
+					<p class="mb-3">
+						<span class="item_price">{{product.main_price|floatformat:2}}</span>
+							<del>{{product.regular_price|floatformat:2}}</del>
+							
+							{% if product.offer_price and product.discount_price %}
+								<span class="ml-2 badge badge-danger">Save {{product.takaoff}} + {{product.offer_price}}%</span>
+							{% elif product.discount_price %}
+								<span class="ml-2 badge badge-danger">Save {{product.takaoff}}</span>
+							{% elif product.offer_price %}
+								<span class="ml-2 badge badge-danger">Save{{product.offer_price}}%</span>
+							{% endif %}
+						
+						{% if product. %}
+						<label class="d-block">Free delivery</label>
+						{% endif %}
+							
+					</p>
+					<div class="single-infoagile">
+						{{product.top_optional_text}}
+					</div>
+					<br>
+					<div class="product-single-w3l pt-3"> 
+							{{product.top_optional_text}} 
+					</div>
+					<br>
+					<div class="occasion-cart">
+						<div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out"> 
+							<a href="{% url 'core:addtocard' product.id %}" class="btn button btn-primary btn-lg d-block">Add to cart</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<hr> 
+
+<section class="product_review_area">
+	<div class="container">
+		<div class="row">
+			<div class="col-6">
+				<h2 class="card-title">Comments</h2>
+				<form action="" method="POST">
+					{% csrf_token %}
+					<p class="card-text">Your Review out of Five</p>
+					{{form.review_number|as_crispy_field}}
+					<p class="card-text">Your Comment about the product</p>
+					{{form.review_content|as_crispy_field}}
+					<input type="submit" class="btn btn-success" value="Post Your Review">
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+<hr>
+<section class="product_reveiw">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				{% for item in review %}
+					<div class="single_reivew card card-body">
+						<h2 class="card-title">{{item.review_user.name}} -- {{item.review_number}}</h2>
+						<p class="card-text">{{item.review_date}}</p>
+						<p class="card-text">{{item.review_content}}</p> 
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+		
+</section>
+<hr>
+	
+	{% endblock content %}
+	
+	{% block script %} 
+
+	<script src="{% static '/js/imagezoom.js' %}"></script>
+		<!-- flexslider -->
+	<link rel="stylesheet" href="{% static '/css/flexslider.css' %}" type="text/css" media="screen" />
+
+	<script src="{% static '/js/jquery.flexslider.js' %}"></script>
+	<script>
+		// Can also be used with $(document).ready()
+		$(window).load(function () {
+			$('.flexslider').flexslider({
+				animation: "slide",
+				controlNav: "thumbnails"
+			});
+		});
+	</script>
+	<!-- //FlexSlider-->
+	{% endblock script %}
+		

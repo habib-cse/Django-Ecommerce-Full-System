@@ -1,0 +1,231 @@
+{% load static %}
+{% load extra_tags %}
+<div class="col-lg-3 mt-lg-0 mt-4 p-lg-0">
+    <div class="side-bar p-sm-4 p-3 search-hotel">
+        <form action="{% url 'core:serch' %}" method="POST">
+            {% csrf_token %}
+            <div class="search-hotel border-bottom py-2">
+                <h3 class="agileits-sear-head mb-3">Search Here..</h3> 
+                    <input type="search" placeholder="Product Name here" name="product" >
+                    <input type="submit" value=" ">
+            </div>
+            <!-- price -->
+            <div class="range border-bottom py-2">
+                <h3 class="agileits-sear-head mb-3">Price</h3>
+                <div class="w3l-range">
+                    <ul>
+                        <li> 
+                            <p class="mb-2">Minimum Price</p>
+                            <div class="form-group">
+                                <input type="number" id="lower_pirce_field" name="lower_pirce" class="form-control" {% if lower_pirce %} value="{{lower_pirce}}" {% else %} value="10"{% endif %} >
+                                <input type="range" onchange="minPriceFunc()" id="lower_pirce" min="10" max="500000" {% if lower_pirce %} value="{{lower_pirce}}" {% else %} value="10"{% endif %} class="form-control">
+                            </div>
+                        </li>
+                        <li> 
+                            <p class="mb-2">Maximum Price</p>
+                            <div class="form-group">
+                                <input type="number" id="upper_pirce_field"  name="upper_pirce" class="form-control" {% if upper_pirce %} value="{{upper_pirce}}" {% else %} value="500000"{% endif %} >
+                                <input type="range" onchange="maxPriceFunc()" id="upper_pirce" min="10" {% if upper_pirce %} value="{{upper_pirce}}" {% else %} value="500000"{% endif %} max="500000" class="form-control">
+                            </div>
+                        </li>
+                    </ul> 
+                </div>
+            </div>
+            <!-- //price -->
+            <!-- discounts -->
+            <div class="left-side border-bottom py-2">
+                <h3 class="agileits-sear-head mb-3">Discount</h3>
+                <ul> 
+                    <li>
+                        <label for="checklast4">
+                        <input type="checkbox" name="fivepercen" class="checked">5% or More</span></label>
+                    </li>
+                    <li>
+                        <label for="checklast3">
+                            <input type="checkbox" name="tweentyper" id="checklast3" class="checked">25% or More
+                        </label>
+                    </li>
+                    <li>
+                        <label for="checklast2">
+                        <input type="checkbox" name="thirtyper" id="checklast2" class="checked">45% or More
+                        </label>
+                    </li>
+                    <li>
+                        <label for="checklast1">
+                        <input type="checkbox" name="fiftyper" id="checklast1" class="checked">60% or More</label>
+                    </li>
+                    <li>
+                        <label for="checklast">
+                        <input type="checkbox" name="sixtyper" id="checklast" class="checked">
+                        60% or More 
+                    </label>
+                    </li>
+                </ul>
+            </div>
+            <!-- //discounts -->
+            <!-- reviews -->
+            <div class="customer-rev border-bottom left-side py-2">
+                <h3 class="agileits-sear-head mb-3">Customer Review</h3>
+                <ul>
+                    <li> 
+                        <label for="fivestart">
+                            <input type="checkbox" name="five_star" id="fivestart">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>5.0</span> 
+                        </label>
+                    </li>
+                    <li> 
+                        <label for="four_star">
+                            <input type="checkbox" name="four_star" id="four_star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.0</span> 
+                        </label>
+                    </li>
+                    <li> 
+                        <label for="four_star">
+                            <input type="checkbox" name="four_star" id="four_star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half"></i>
+                            <span>4.0</span> 
+                        </label>
+                    </li>
+
+                    <li> 
+                        <label for="four_star">
+                            <input type="checkbox" name="four_star" id="four_star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half"></i>
+                            <span>3.5</span> 
+                        </label> 
+                    </li>
+                    <li> 
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>3.0</span> 
+                    </li>
+                    <li> 
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half"></i>
+                            <span>2.5</span> 
+                    </li>
+                </ul>
+            </div>
+            <!-- //reviews -->
+            <!-- electronics -->
+            <div class="left-side border-bottom py-2">
+                <h3 class="agileits-sear-head mb-3">Electronics</h3>
+                <ul>
+                    
+                    {% for item in product_cat|category  %}
+                    <li>
+                        <input type="checkbox" value="{{item.id}}" name="category_{{item.id}}" class="checked">
+                        <span class="span">{{item}}</span>
+                    </li>
+                    {% endfor %}
+                        
+
+    
+                </ul>
+            </div>
+            <!-- //electronics -->
+            <!-- delivery -->
+            <div class="left-side border-bottom py-2">
+                <h3 class="agileits-sear-head mb-3">Cash On Delivery</h3>
+                <ul>
+                    <li>
+                        <input type="checkbox" class="checked">
+                        <span class="span">Eligible for Cash On Delivery</span>
+                    </li>
+                </ul>
+            </div>
+            <!-- //delivery -->
+
+        </form>
+        <!-- arrivals -->
+        <div class="left-side border-bottom py-2">
+            <h3 class="agileits-sear-head mb-3">New Arrivals</h3>
+            <ul>
+                <li>
+                    <input type="checkbox" class="checked">
+                    <span class="span">Last 30 days</span>
+                </li>
+                <li>
+                    <input type="checkbox" class="checked">
+                    <span class="span">Last 90 days</span>
+                </li>
+            </ul>
+        </div>
+        <!-- //arrivals -->
+        <!-- best seller -->
+        <div class="f-grid py-2">
+            <h3 class="agileits-sear-head mb-3">Best Seller</h3>
+            <div class="box-scroll">
+                <div class="scroll">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-2 col-3 left-mar">
+                            <img src="{% static '/images/k1.jpg' %}" alt="" class="img-fluid">
+                        </div>
+                        <div class="col-lg-9 col-sm-10 col-9 w3_mvd">
+                            <a href="">Samsung Galaxy On7 Prime (Gold, 4GB RAM + 64GB Memory)</a>
+                            <a href="" class="price-mar mt-2">$12,990.00</a>
+                        </div>
+                    </div>
+                    <div class="row my-4">
+                        <div class="col-lg-3 col-sm-2 col-3 left-mar">
+                            <img src="{% static '/images/k2.jpg' %}" alt="" class="img-fluid">
+                        </div>
+                        <div class="col-lg-9 col-sm-10 col-9 w3_mvd">
+                            <a href="">Haier 195 L 4 Star Direct-Cool Single Door Refrigerator</a>
+                            <a href="" class="price-mar mt-2">$12,499.00</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-2 col-3 left-mar">
+                            <img src="{% static '/images/k3.jpg' %}" alt="" class="img-fluid">
+                        </div>
+                        <div class="col-lg-9 col-sm-10 col-9 w3_mvd">
+                            <a href="">Ambrane 13000 mAh Power Bank (P-1310 Premium)</a>
+                            <a href="" class="price-mar mt-2">$1,199.00 </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //best seller -->
+    </div>
+    <!-- //product right -->
+</div>
+
+
+{% block script %}
+    <script>
+        function minPriceFunc(){
+            var start_value = document.getElementById("lower_pirce").value; 
+            document.getElementById("lower_pirce_field").setAttribute('value',start_value); 
+        }
+
+        function maxPriceFunc(){
+            var max_value = document.getElementById("upper_pirce").value;
+            document.getElementById("upper_pirce_field").setAttribute('value',max_value);
+        }
+
+
+
+
+    </script>
+{% endblock script %}
+    
